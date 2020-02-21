@@ -24,11 +24,10 @@ public:
     void analyseInputLine(std::string &line);
 
     std::vector<INPUT_LINE> getInput();
-    bool getEndOfInputDetected();
 
 private:
     std::vector<INPUT_LINE> _input;
-    bool _endOfInputDetected;
+    std::vector<std::string> _errors;
 };
 
 

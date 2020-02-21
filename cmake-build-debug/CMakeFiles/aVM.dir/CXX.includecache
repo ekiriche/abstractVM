@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/cygdrive/c/Users/The Champ/CLionProjects/aVM/Lexer.cpp
+iostream
+-
+Lexer.hpp
+/cygdrive/c/Users/The Champ/CLionProjects/aVM/Lexer.hpp
+
+/cygdrive/c/Users/The Champ/CLionProjects/aVM/Lexer.hpp
+iostream
+-
+vector
+-
+
+/cygdrive/c/Users/The Champ/CLionProjects/aVM/main.cpp
+iostream
+-
+Lexer.cpp
+/cygdrive/c/Users/The Champ/CLionProjects/aVM/Lexer.cpp
+

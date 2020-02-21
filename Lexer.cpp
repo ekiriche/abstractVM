@@ -3,25 +3,24 @@
 //
 #include <iostream>
 #include "Lexer.hpp"
-//#include "Functions.cpp"
 #include <algorithm>
 
 Lexer::Lexer() {
-    this->_endOfInputDetected = false;
 };
 
 Lexer::~Lexer() {
-//    delete(this->_input);
+
 };
 
 Lexer::Lexer(Lexer const &lexer) {
     *this = lexer;
-    this->_input = lexer._input;
-    this->_endOfInputDetected = lexer._endOfInputDetected;
 };
 
 Lexer& Lexer::operator=(Lexer const &lexer) {
-    *this = lexer;
+    if (this != &lexer) {
+        this->_input = lexer._input;
+        this->_errors = lexer._errors;
+    }
     return *this;
 }
 
@@ -39,7 +38,6 @@ void Lexer::analyseInputLine(std::string &line) {
     if (line.length()) {
         if (line[0] == ';') {
             tokens.comment = line.substr(1);
-//            std::cout << tokens.instruction << std::endl;
         } else {
             int i = 0;
             while (i < line.length() && !isspace(line[i]) && line[i] != ';') {
@@ -67,8 +65,9 @@ void Lexer::analyseInputLine(std::string &line) {
                             i++;
                         }
                         if (line[i] != ';') {
-                            std::cout << "EXCEPTION" << std::endl;
-                            //exception should be raised at this line because of unknown token
+                            this->_errors.push_back("Lexer error: undefined token at " +
+                            std::to_string(this->_input.size() + 1) + ":" + std::to_string(i));
+                            return ;
                         } else {
                             tokens.comment = line.substr(i + 1);
                         }
@@ -76,21 +75,12 @@ void Lexer::analyseInputLine(std::string &line) {
                 }
             }
         }
-
-        std::cout << tokens.instruction << " | " << tokens.value << " | " << tokens.comment << std::endl;
         this->_input.push_back(tokens);
-        for (int u = 0; u < this->_input.size(); u++) {
-            std::cout << this->_input[u].instruction << " | " << this->_input[u].value << " | " << this->_input[u].comment << std::endl;
-        }
     }
 }
 
 std::vector<INPUT_LINE> Lexer::getInput() {
     return this->_input;
-}
-
-bool Lexer::getEndOfInputDetected() {
-    return this->_endOfInputDetected;
 }
 
 
