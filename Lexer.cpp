@@ -57,7 +57,6 @@ void Lexer::analyseInputLine(std::string &line) {
                     while (i < line.length() && !isspace(line[i]) && line[i] != ';') {
                         i++;
                     }
-                    std::cout << i << " " << start << std::endl;
                     tokens.value = line.substr(start, i - start);
 
                     if (i != line.length()) {
@@ -81,6 +80,10 @@ void Lexer::analyseInputLine(std::string &line) {
 
 std::vector<INPUT_LINE> Lexer::getInput() {
     return this->_input;
+}
+
+std::vector<std::string> Lexer::getErrors() {
+    return this->_errors;
 }
 
 

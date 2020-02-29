@@ -26,8 +26,11 @@ public:
 
     void parseInputLine(INPUT_LINE &line);
 
+    std::vector<PARSED_LINE> getParsedLines();
+    std::vector<std::string> getParserErrors();
+
 private:
-    std::vector<INPUT_LINE> _parsedLines;
+    std::vector<PARSED_LINE> _parsedLines;
     std::vector<std::string> _parserErrors;
 };
 

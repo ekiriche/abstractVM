@@ -4,6 +4,7 @@
 
 #include "eOperand.hpp"
 #include <cmath>
+#include <iomanip>
 
 template<typename T>
 eOperand<T>::eOperand() {}
@@ -89,6 +90,10 @@ IOperand const *eOperand<T>::operator/(IOperand const &rhs) const {
     eOperandType newType;
     std::string newStringValue;
 
+    if (std::stoll(rhs.toString()) == 0) {
+        throw Exception("Division on zero");
+    }
+
     this->_type >= rhs.getType() ? newType = this->_type : newType = rhs.getType();
 
     newType == Float || newType == Double ?
@@ -102,6 +107,10 @@ template<typename T>
 IOperand const *eOperand<T>::operator%(IOperand const &rhs) const {
     eOperandType newType;
     std::string newStringValue;
+
+    if (std::stoll(rhs.toString()) == 0) {
+        throw Exception("Modulo on zero");
+    }
 
     this->_type >= rhs.getType() ? newType = this->_type : newType = rhs.getType();
 

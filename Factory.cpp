@@ -35,9 +35,9 @@ IOperand const *Factory::createOperand(eOperandType type, std::string const &val
 IOperand const *Factory::createInt8(std::string const &value) const {
     int64_t num = std::stoll(value);
     if (num > INT8_MAX) {
-        //overflow
+        throw Exception("Overflow on create value " + value + " with type int8");
     } else if (num < INT8_MIN) {
-        //underflow
+        throw Exception("Underflow on create value " + value + " with type int8");
     }
 
     return (new eOperand<int8_t>(static_cast<int8_t>(num), Int8));
@@ -46,9 +46,9 @@ IOperand const *Factory::createInt8(std::string const &value) const {
 IOperand const *Factory::createInt16(std::string const &value) const {
     int64_t num = std::stoll(value);
     if (num > INT16_MAX) {
-        //overflow
+        throw Exception("Overflow on create value " + value + " with type int16");
     } else if (num < INT16_MIN) {
-        //underflow
+        throw Exception("Underflow on create value " + value + " with type int16");
     }
 
     return (new eOperand<int16_t>(static_cast<int16_t>(num), Int16));
@@ -57,9 +57,9 @@ IOperand const *Factory::createInt16(std::string const &value) const {
 IOperand const *Factory::createInt32(std::string const &value) const {
     int64_t num = std::stoll(value);
     if (num > INT32_MAX) {
-        //overflow
+        throw Exception("Overflow on create value " + value + " with type int32");
     } else if (num < INT32_MIN) {
-        //underflow
+        throw Exception("Underflow on create value " + value + " with type int32");
     }
 
     return (new eOperand<int32_t>(static_cast<int32_t>(num), Int32));
@@ -68,9 +68,9 @@ IOperand const *Factory::createInt32(std::string const &value) const {
 IOperand const *Factory::createFloat(std::string const &value) const {
     long double num = std::stold(value);
     if (num > FLT_MAX) {
-        //overflow
+        throw Exception("Overflow on create value " + value + " with type float");
     } else if (num < FLT_MIN) {
-        //underflow
+        throw Exception("Underflow on create value " + value + " with type float");
     }
 
     return (new eOperand<float>(static_cast<float>(num), Float));
@@ -79,9 +79,9 @@ IOperand const *Factory::createFloat(std::string const &value) const {
 IOperand const *Factory::createDouble(std::string const &value) const {
     long double num = std::stold(value);
     if (num > DBL_MAX) {
-        //overflow
+        throw Exception("Overflow on create value " + value + " with type double");
     } else if (num < DBL_MIN) {
-        //underflow
+        throw Exception("Underflow on create value " + value + " with type double");
     }
 
     return (new eOperand<double>(static_cast<double>(num), Double));

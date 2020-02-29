@@ -1,39 +1,76 @@
 #include <iostream>
+#include <cstring>
+#include <fstream>
 #include "Lexer.hpp"
-//#include "Parser.cpp"
-//#include "Factory.hpp"
-#include "eOperand.hpp"
-#include "IOperand.hpp"
+#include "Parser.hpp"
+#include "Interpreter.hpp"
 
 int main(int argc, char** argv) {
-    if (argc > 2) {
-        printf("Usage: ./aVM\n"
-               "       ./aVM [filename]\n");
-        exit(0);
+    bool verboseMode = false;
+    size_t numberOfArguments = 0;
+
+    size_t j = 1;
+    while (argv[j]) {
+        if (strcmp(argv[j], "-verbose") == 0) {
+            verboseMode = true;
+        } else {
+            numberOfArguments++;
+        }
+        j++;
     }
 
     Lexer *lexer = new Lexer();
-//    eOperand<int8_t> *some = new eOperand<int8_t>(Int8, "200");
-    eOperand<int8_t> *some1 = (eOperand<int8_t> *) Factory().createOperand(Int8, "40");
-    eOperand<int8_t> *some2 = (eOperand<int8_t> *) Factory().createOperand(Int8, "60");
-    eOperand<int8_t> *some3 = (eOperand<int8_t> *) (*some1 + *some2);
-    some3 = (eOperand<int8_t> *) (*some3 % *some1);
-    std::cout << std::to_string(some3->getValue()) << std::endl;
+    Parser *parser = new Parser();
+    Interpreter *interpreter = new Interpreter(verboseMode);
+    std::string inputLine;
 
-    if (argc == 1) {
+    if (numberOfArguments == 0) {
         printf("=============== START ===============\n");
-        std::string input;
 
-        while (true) {
-            if (std::getline(std::cin, input)) {
-                if (input.length() >= 2 && input.substr(0, 2) == ";;") {
-                    break ;
-                }
-                lexer->analyseInputLine(input);
+        while (std::getline(std::cin, inputLine)) {
+            if (inputLine.length() >= 2 && inputLine.substr(0, 2) == ";;") {
+                break ;
             }
+            lexer->analyseInputLine(inputLine);
         }
+    } else if (numberOfArguments == 1) {
+        std::ifstream file(argv[1]);
 
+        if (file.is_open()) {
+            while (std::getline(file, inputLine)) {
+                lexer->analyseInputLine(inputLine);
+            }
+        } else {
+            std::cout << "Unable to open file" << std::endl;
+            exit(0);
+        }
+    } else {
+        std::cout << "Usage: './abstractVM' OR './abstractVM filename'" << std::endl;
+        exit(0);
+    }
 
+//    std::cout << "=============== PARSED LINES ===============" << std::endl;
+//    for (ssize_t i = 0; i < parser->getParsedLines().size(); i++) {
+//        std::cout << parser->getParsedLines()[i].instruction << " " << parser->getParsedLines()[i].type << " " << parser->getParsedLines()[i].value << std::endl;
+//    }
+    std::cout << "=============== LEXER ERRORS ===============" << std::endl;
+    for (ssize_t i = 0; i < lexer->getErrors().size(); i++) {
+        std::cout << lexer->getErrors()[i] << std::endl;
+    }
+    std::cout << "===============+++++++++++++++===============" << std::endl;
+
+    std::cout << "=============== PARSER ERRORS ===============" << std::endl;
+    for (ssize_t i = 0; i < parser->getParserErrors().size(); i++) {
+        std::cout << parser->getParserErrors()[i] << std::endl;
+    }
+    std::cout << "===============+++++++++++++++===============" << std::endl;
+
+    for (ssize_t i = 0; i < lexer->getInput().size(); i++) {
+        parser->parseInputLine(lexer->getInput()[i]);
+    }
+
+    for (ssize_t i = 0; i < parser->getParsedLines().size(); i++) {
+        interpreter->executeCommand(parser->getParsedLines()[i]);
     }
 
     return 0;

@@ -24,6 +24,7 @@ public:
     void analyseInputLine(std::string &line);
 
     std::vector<INPUT_LINE> getInput();
+    std::vector<std::string> getErrors();
 
 private:
     std::vector<INPUT_LINE> _input;
