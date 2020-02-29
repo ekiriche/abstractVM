@@ -90,7 +90,7 @@ IOperand const *eOperand<T>::operator/(IOperand const &rhs) const {
     eOperandType newType;
     std::string newStringValue;
 
-    if (std::stoll(rhs.toString()) == 0) {
+    if (std::stold(rhs.toString()) == 0) {
         throw Exception("Division on zero");
     }
 
@@ -108,7 +108,7 @@ IOperand const *eOperand<T>::operator%(IOperand const &rhs) const {
     eOperandType newType;
     std::string newStringValue;
 
-    if (std::stoll(rhs.toString()) == 0) {
+    if (std::stold(rhs.toString()) == 0) {
         throw Exception("Modulo on zero");
     }
 

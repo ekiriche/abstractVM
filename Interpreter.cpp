@@ -81,7 +81,8 @@ void Interpreter::operandPop() {
         std::cout << "Error occurred on line " << this->_linesExecuted + 1 << ": " << exception.what() << std::endl;
         exit(1);
     } catch (std::exception &e) {
-        std::cout << "Error occurred on line " << this->_linesExecuted + 1 << ": " << e.what() << std::endl;
+        std::cout << "Error occurred on line " << this->_linesExecuted + 1 << ": " << e.what() << std::endl
+        ;
         exit(1);
     }
 }
