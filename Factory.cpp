@@ -67,22 +67,22 @@ IOperand const *Factory::createInt32(std::string const &value) const {
 
 IOperand const *Factory::createFloat(std::string const &value) const {
     long double num = std::stold(value);
-    if (num > FLT_MAX) {
-        throw Exception("Overflow on create value " + value + " with type float");
-    } else if (num < FLT_MIN) {
-        throw Exception("Underflow on create value " + value + " with type float");
-    }
+//    if (num > std::numeric_limits<float>::max()) {
+//        throw Exception("Overflow on create value " + value + " with type float");
+//    } else if (num < std::numeric_limits<float>::min()) {
+//        throw Exception("Underflow on create value " + value + " with type float");
+//    }
 
     return (new eOperand<float>(static_cast<float>(num), Float));
 }
 
 IOperand const *Factory::createDouble(std::string const &value) const {
     long double num = std::stold(value);
-    if (num > DBL_MAX) {
-        throw Exception("Overflow on create value " + value + " with type double");
-    } else if (num < DBL_MIN) {
-        throw Exception("Underflow on create value " + value + " with type double");
-    }
+//    if (num > DBL_MAX) {
+//        throw Exception("Overflow on create value " + value + " with type double");
+//    } else if (num < DBL_MIN) {
+//        throw Exception("Underflow on create value " + value + " with type double");
+//    }
 
     return (new eOperand<double>(static_cast<double>(num), Double));
 }

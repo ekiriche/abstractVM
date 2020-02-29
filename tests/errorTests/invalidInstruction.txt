@@ -1,0 +1,3 @@
+push int16(32)
+puhs int32(9)
+exit

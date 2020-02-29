@@ -1,10 +1,9 @@
 push int32(42) 
 push int32(33) 
 add ;poney
-push float(44.55)
 mul
-mul push double(42.42)
-;commentaire de ouf
+push double(42.42)
+;comment
 push int32(42)
 dump
 pop

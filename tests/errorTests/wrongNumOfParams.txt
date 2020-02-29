@@ -1,0 +1,2 @@
+push push int15(32)
+exit

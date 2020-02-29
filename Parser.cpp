@@ -27,6 +27,12 @@ Parser& Parser::operator=(Parser const &parser) {
 void Parser::parseInputLine(INPUT_LINE &line) {
     PARSED_LINE parsedLine = {};
 
+    if (line.instruction.empty() && line.value.empty()) {
+        parsedLine.comment = line.comment;
+        this->_parsedLines.push_back(parsedLine);
+        return ;
+    }
+
     if (line.instruction == "push" || line.instruction == "pop" || line.instruction == "dump" ||
     line.instruction == "assert" || line.instruction == "add" || line.instruction == "sub" ||
     line.instruction == "mul" || line.instruction == "div" || line.instruction == "mod" ||
@@ -34,6 +40,12 @@ void Parser::parseInputLine(INPUT_LINE &line) {
         if ((line.instruction == "push" || line.instruction == "assert") && line.value.empty()) {
             this->_parserErrors.push_back("Parser error: instruction " + line.instruction +
             " requires a second parameter as value");
+            return ;
+        }
+
+        if (line.instruction != "push" && line.instruction != "assert" && !line.value.empty()) {
+            this->_parserErrors.push_back("Parser error: instruction " + line.instruction +
+                                          " don't requires a second parameter");
             return ;
         }
 
@@ -86,7 +98,7 @@ void Parser::parseInputLine(INPUT_LINE &line) {
 
         bool dotFound = false;
         bool numberFound = false;
-        for (ssize_t i = 0; i < value.length(); i++) {
+        for (unsigned int i = 0; i < value.length(); i++) {
             if (isdigit(value[i])) numberFound = true;
 
             if (value[i] == '.' && !dotFound && i != 0 && i != value.length() - 1 && numberFound) {
@@ -105,6 +117,16 @@ void Parser::parseInputLine(INPUT_LINE &line) {
     }
 
     this->_parsedLines.push_back(parsedLine);
+}
+
+void Parser::checkForExitCommand() {
+    for (unsigned int i = 0; i < this->_parsedLines.size(); i++) {
+        if (this->_parsedLines[i].instruction == "exit") {
+            return ;
+        }
+    }
+
+    this->_parserErrors.push_back("Parser error: no exit instruction");
 }
 
 std::vector<PARSED_LINE> Parser::getParsedLines() {

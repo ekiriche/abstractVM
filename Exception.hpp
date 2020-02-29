@@ -12,7 +12,7 @@
 class Exception : public std::runtime_error {
 public:
     Exception(const std::string &message) throw();
-    ~Exception();
+    ~Exception() throw();
     Exception(Exception const &exception) throw();
     Exception &operator=(Exception const &exception) throw();
     const char *what() const throw();

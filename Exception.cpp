@@ -12,7 +12,7 @@ Exception::Exception(const std::string &message) throw() : std::runtime_error(me
     this->_message = message;
 }
 
-Exception::~Exception() {
+Exception::~Exception() throw() {
 
 }
 

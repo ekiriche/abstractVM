@@ -1,0 +1,3 @@
+push int8(32)
+push int16(129)
+add

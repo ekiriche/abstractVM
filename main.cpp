@@ -6,6 +6,9 @@
 #include "Interpreter.hpp"
 
 int main(int argc, char** argv) {
+    if (!argc) {
+        exit(0);
+    }
     bool verboseMode = false;
     size_t numberOfArguments = 0;
 
@@ -28,7 +31,7 @@ int main(int argc, char** argv) {
         printf("=============== START ===============\n");
 
         while (std::getline(std::cin, inputLine)) {
-            if (inputLine.length() >= 2 && inputLine.substr(0, 2) == ";;") {
+            if (inputLine.length() == 2 && inputLine == ";;") {
                 break ;
             }
             lexer->analyseInputLine(inputLine);
@@ -42,11 +45,11 @@ int main(int argc, char** argv) {
             }
         } else {
             std::cout << "Unable to open file" << std::endl;
-            exit(0);
+            exit(1);
         }
     } else {
         std::cout << "Usage: './abstractVM' OR './abstractVM filename'" << std::endl;
-        exit(0);
+        exit(1);
     }
 
 //    std::cout << "=============== PARSED LINES ===============" << std::endl;
@@ -54,24 +57,35 @@ int main(int argc, char** argv) {
 //        std::cout << parser->getParsedLines()[i].instruction << " " << parser->getParsedLines()[i].type << " " << parser->getParsedLines()[i].value << std::endl;
 //    }
     std::cout << "=============== LEXER ERRORS ===============" << std::endl;
-    for (ssize_t i = 0; i < lexer->getErrors().size(); i++) {
+    for (unsigned long i = 0; i < lexer->getErrors().size(); i++) {
         std::cout << lexer->getErrors()[i] << std::endl;
     }
     std::cout << "===============+++++++++++++++===============" << std::endl;
 
+    for (unsigned long i = 0; i < lexer->getInput().size(); i++) {
+//        std::cout << lexer->getInput()[i].instruction << std::endl;
+        parser->parseInputLine(lexer->getInput()[i]);
+    }
+    parser->checkForExitCommand();
+
     std::cout << "=============== PARSER ERRORS ===============" << std::endl;
-    for (ssize_t i = 0; i < parser->getParserErrors().size(); i++) {
+    for (unsigned long i = 0; i < parser->getParserErrors().size(); i++) {
         std::cout << parser->getParserErrors()[i] << std::endl;
     }
     std::cout << "===============+++++++++++++++===============" << std::endl;
 
-    for (ssize_t i = 0; i < lexer->getInput().size(); i++) {
-        parser->parseInputLine(lexer->getInput()[i]);
+    if (lexer->getErrors().size() || parser->getParserErrors().size()) {
+        std::cout << "Exiting..." << std::endl;
+        exit(1);
+    } else {
+        std::cout << "=============== EXECUTING COMMANDS ===============" << std::endl;
     }
 
-    for (ssize_t i = 0; i < parser->getParsedLines().size(); i++) {
+    for (unsigned long i = 0; i < parser->getParsedLines().size(); i++) {
         interpreter->executeCommand(parser->getParsedLines()[i]);
     }
+
+    std::cout << "=============== EXECUTION FINISHED ===============" << std::endl;
 
     return 0;
 }

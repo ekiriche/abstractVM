@@ -27,19 +27,15 @@ Lexer& Lexer::operator=(Lexer const &lexer) {
 void Lexer::analyseInputLine(std::string &line) {
     INPUT_LINE tokens = {};
 
-    line.erase(line.begin(), std::find_if(line.begin(), line.end(), [](int ch) {
-        return !std::isspace(ch);
-    }));
+    line.erase(line.begin(), std::find_if(line.begin(), line.end(), this->isNotSpace));
 
-    line.erase(std::find_if(line.rbegin(), line.rend(), [](int ch) {
-        return !std::isspace(ch);
-    }).base(), line.end());
+    line.erase(std::find_if(line.rbegin(), line.rend(), this->isNotSpace).base(), line.end());
 
     if (line.length()) {
         if (line[0] == ';') {
             tokens.comment = line.substr(1);
         } else {
-            int i = 0;
+            unsigned long i = 0;
             while (i < line.length() && !isspace(line[i]) && line[i] != ';') {
                 i++;
             }
@@ -53,7 +49,7 @@ void Lexer::analyseInputLine(std::string &line) {
                 if (line[i] == ';') {
                     tokens.comment = line.substr(i + 1);
                 } else {
-                    int start = i;
+                    unsigned start = i;
                     while (i < line.length() && !isspace(line[i]) && line[i] != ';') {
                         i++;
                     }
@@ -76,6 +72,10 @@ void Lexer::analyseInputLine(std::string &line) {
         }
         this->_input.push_back(tokens);
     }
+}
+
+bool Lexer::isNotSpace(int ch) {
+    return !std::isspace(ch);
 }
 
 std::vector<INPUT_LINE> Lexer::getInput() {

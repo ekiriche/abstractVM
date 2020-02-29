@@ -1,0 +1,3 @@
+push int8(32)
+add
+exit

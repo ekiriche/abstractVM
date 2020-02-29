@@ -22,6 +22,7 @@ public:
     Lexer& operator=(Lexer const &lexer);
 
     void analyseInputLine(std::string &line);
+    static bool isNotSpace(int ch);
 
     std::vector<INPUT_LINE> getInput();
     std::vector<std::string> getErrors();

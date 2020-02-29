@@ -25,6 +25,7 @@ public:
     Parser& operator=(Parser const &parser);
 
     void parseInputLine(INPUT_LINE &line);
+    void checkForExitCommand();
 
     std::vector<PARSED_LINE> getParsedLines();
     std::vector<std::string> getParserErrors();

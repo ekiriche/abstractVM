@@ -1,3 +1,0 @@
-/cygdrive/c/Users/The Champ/CLionProjects/aVM/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/cygdrive/c/Users/The Champ/CLionProjects/aVM/cmake-build-debug/CMakeFiles/aVM.dir
-/cygdrive/c/Users/The Champ/CLionProjects/aVM/cmake-build-debug/CMakeFiles/edit_cache.dir

@@ -1,0 +1,3 @@
+push int32(90)
+assert int16(90)
+exit
