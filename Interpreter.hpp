@@ -12,6 +12,10 @@
 #include "Factory.hpp"
 #include <cassert>
 #include "Exception.hpp"
+#include <functional>
+#include <vector>
+#include <numeric>
+#include <string>
 
 class Interpreter {
 public:
@@ -32,6 +36,10 @@ public:
     void operandDiv();
     void operandMod();
     void operandPrint();
+
+    void operandFindMax();
+    void operandFindMin();
+    void operandFindAvg();
 
     std::vector<IOperand const *> getStack();
 

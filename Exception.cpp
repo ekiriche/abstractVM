@@ -29,5 +29,7 @@ Exception &Exception::operator=(Exception const &exception) throw() {
 }
 
 const char *Exception::what() const throw() {
-    return this->_message.c_str();
+    std::string errorMessage = "\033[1;31m" + this->_message + "\033[0m";
+
+    return errorMessage.c_str();
 }

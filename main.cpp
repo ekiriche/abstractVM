@@ -52,25 +52,20 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-//    std::cout << "=============== PARSED LINES ===============" << std::endl;
-//    for (ssize_t i = 0; i < parser->getParsedLines().size(); i++) {
-//        std::cout << parser->getParsedLines()[i].instruction << " " << parser->getParsedLines()[i].type << " " << parser->getParsedLines()[i].value << std::endl;
-//    }
     std::cout << "=============== LEXER ERRORS ===============" << std::endl;
     for (unsigned long i = 0; i < lexer->getErrors().size(); i++) {
-        std::cout << lexer->getErrors()[i] << std::endl;
+        std::cout << "\033[1;31m" << lexer->getErrors()[i] << "\033[0m" << std::endl;
     }
     std::cout << "===============+++++++++++++++===============" << std::endl;
 
     for (unsigned long i = 0; i < lexer->getInput().size(); i++) {
-//        std::cout << lexer->getInput()[i].instruction << std::endl;
         parser->parseInputLine(lexer->getInput()[i]);
     }
     parser->checkForExitCommand();
 
     std::cout << "=============== PARSER ERRORS ===============" << std::endl;
     for (unsigned long i = 0; i < parser->getParserErrors().size(); i++) {
-        std::cout << parser->getParserErrors()[i] << std::endl;
+        std::cout << "\033[1;31m" << parser->getParserErrors()[i] << "\033[0m" << std::endl;
     }
     std::cout << "===============+++++++++++++++===============" << std::endl;
 

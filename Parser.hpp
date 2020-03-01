@@ -33,6 +33,7 @@ public:
 private:
     std::vector<PARSED_LINE> _parsedLines;
     std::vector<std::string> _parserErrors;
+    unsigned int _currentLine;
 };
 
 

@@ -47,6 +47,12 @@ void Interpreter::executeCommand(PARSED_LINE line) {
         this->operandMod();
     } else if (line.instruction == "print") {
         this->operandPrint();
+    } else if (line.instruction == "min") {
+        this->operandFindMin();
+    } else if (line.instruction == "max") {
+        this->operandFindMax();
+    } else if (line.instruction == "avg") {
+        this->operandFindAvg();
     } else if (line.instruction == "exit") {
         exit(0);
     }
@@ -88,23 +94,21 @@ void Interpreter::operandPop() {
 }
 
 void Interpreter::operandDump() const {
-    if (this->_verboseMode) {
-        std::cout << "=============== DUMP START ===============" << std::endl;
-    }
+    std::cout << "=============== DUMP START ===============" << std::endl;
 
     for (unsigned int i = 0; i < this->_stack.size(); i++) {
         std::cout << this->_stack[i]->toString() << std::endl;
     }
 
-    if (this->_verboseMode) {
-        std::cout << "=============== DUMP END ===============" << std::endl;
-    }
+    std::cout << "=============== DUMP END ===============" << std::endl;
 }
 
 void Interpreter::operandAssert(eOperandType type, std::string value) {
     try {
         if (!this->_stack.size() || this->_stack[this->_stack.size() - 1]->getType() != type ||
-                std::stod(this->_stack[this->_stack.size() - 1]->toString()) != std::stod(value)) {
+                (type != Float && type != Double && std::stoll(this->_stack[this->_stack.size() - 1]->toString()) != std::stoll(value)) ||
+                (type == Float && std::stof(this->_stack[this->_stack.size() - 1]->toString()) != std::stof(value)) ||
+                (type == Double && std::stod(this->_stack[this->_stack.size() - 1]->toString()) != std::stod(value))) {
             throw Exception("Assert check for value " + value + " failed");
         }
 
@@ -256,6 +260,78 @@ void Interpreter::operandPrint() {
             throw Exception("Print command on non-int8 value type");
         }
         std::cout << static_cast<int8_t>(std::stoi(this->_stack[this->_stack.size() - 1]->toString())) << std::endl;
+    } catch (Exception &exception) {
+        std::cout << "Error occurred on line " << this->_linesExecuted + 1 << ": " << exception.what() << std::endl;
+        exit(1);
+    } catch (std::exception &e) {
+        std::cout << "Error occurred on line " << this->_linesExecuted + 1 << ": " << e.what() << std::endl;
+        exit(1);
+    }
+}
+
+void Interpreter::operandFindMin() {
+    try {
+        if (!this->_stack.size()) {
+            throw Exception("Find min on empty stack");
+        }
+
+        long double minValue = std::stold(this->_stack[0]->toString());
+        for (unsigned long i = 1; i < this->_stack.size(); i++) {
+            long double tmp = std::stold(this->_stack[i]->toString());
+
+            if (minValue > tmp) {
+                minValue = tmp;
+            }
+        }
+
+        std::cout << "Min value: " + std::to_string(minValue) << std::endl;
+    } catch (Exception &exception) {
+        std::cout << "Error occurred on line " << this->_linesExecuted + 1 << ": " << exception.what() << std::endl;
+        exit(1);
+    } catch (std::exception &e) {
+        std::cout << "Error occurred on line " << this->_linesExecuted + 1 << ": " << e.what() << std::endl;
+        exit(1);
+    }
+}
+
+void Interpreter::operandFindMax() {
+    try {
+        if (!this->_stack.size()) {
+            throw Exception("Find min on empty stack");
+        }
+
+        long double maxValue = std::stold(this->_stack[0]->toString());
+        for (unsigned long i = 1; i < this->_stack.size(); i++) {
+            long double tmp = std::stold(this->_stack[i]->toString());
+
+            if (maxValue < tmp) {
+                maxValue = tmp;
+            }
+        }
+
+        std::cout << "Max value: " + std::to_string(maxValue) << std::endl;
+    } catch (Exception &exception) {
+        std::cout << "Error occurred on line " << this->_linesExecuted + 1 << ": " << exception.what() << std::endl;
+        exit(1);
+    } catch (std::exception &e) {
+        std::cout << "Error occurred on line " << this->_linesExecuted + 1 << ": " << e.what() << std::endl;
+        exit(1);
+    }
+}
+
+void Interpreter::operandFindAvg() {
+    try {
+        if (!this->_stack.size()) {
+            throw Exception("Find abg on empty stack");
+        }
+
+        long double sum = std::stold(this->_stack[0]->toString());
+        for (unsigned int i = 1; i < this->_stack.size(); i++) {
+            sum += std::stold(this->_stack[i]->toString());
+        }
+        sum /= this->_stack.size();
+        std::cout << "Average value: " << std::to_string(sum) << std::endl;
+
     } catch (Exception &exception) {
         std::cout << "Error occurred on line " << this->_linesExecuted + 1 << ": " << exception.what() << std::endl;
         exit(1);

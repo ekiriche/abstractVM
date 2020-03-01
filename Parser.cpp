@@ -5,7 +5,7 @@
 #include "Parser.hpp"
 
 Parser::Parser() {
-
+    this->_currentLine = 0;
 }
 
 Parser::~Parser() {
@@ -20,12 +20,15 @@ Parser& Parser::operator=(Parser const &parser) {
     if (this != &parser) {
         this->_parserErrors = parser._parserErrors;
         this->_parsedLines = parser._parsedLines;
+        this->_currentLine = parser._currentLine;
     }
     return *this;
 }
 
 void Parser::parseInputLine(INPUT_LINE &line) {
     PARSED_LINE parsedLine = {};
+
+    this->_currentLine++;
 
     if (line.instruction.empty() && line.value.empty()) {
         parsedLine.comment = line.comment;
@@ -36,7 +39,8 @@ void Parser::parseInputLine(INPUT_LINE &line) {
     if (line.instruction == "push" || line.instruction == "pop" || line.instruction == "dump" ||
     line.instruction == "assert" || line.instruction == "add" || line.instruction == "sub" ||
     line.instruction == "mul" || line.instruction == "div" || line.instruction == "mod" ||
-    line.instruction == "print" || line.instruction == "exit") {
+    line.instruction == "print" || line.instruction == "exit" || line.instruction == "max" ||
+    line.instruction == "min" || line.instruction == "avg") {
         if ((line.instruction == "push" || line.instruction == "assert") && line.value.empty()) {
             this->_parserErrors.push_back("Parser error: instruction " + line.instruction +
             " requires a second parameter as value");
@@ -52,20 +56,20 @@ void Parser::parseInputLine(INPUT_LINE &line) {
         parsedLine.instruction = line.instruction;
     } else {
         this->_parserErrors.push_back("Parser error: undefined instruction at line " +
-        std::to_string(this->_parsedLines.size() + 1));
+        std::to_string(this->_currentLine));
         return ;
     }
 
     if (!line.value.empty()) {
         if (line.instruction != "push" && line.instruction != "assert") {
             this->_parserErrors.push_back("Parser error: no value provided at line " +
-                                          std::to_string(this->_parsedLines.size() + 1));
+                                          std::to_string(this->_currentLine));
             return ;
         }
 
         if (!line.value.find('(') || line.value.find(')') != line.value.length() - 1) {
             this->_parserErrors.push_back("Parser error: second parameter at line " +
-            std::to_string(this->_parsedLines.size() + 1) + " is invalid");
+            std::to_string(this->_currentLine) + " is invalid");
             return ;
         }
 
@@ -83,7 +87,7 @@ void Parser::parseInputLine(INPUT_LINE &line) {
             parsedLine.type = Double;
         } else {
             this->_parserErrors.push_back("Parser error: unrecognized value type at line " +
-            std::to_string(this->_parsedLines.size() + 1));
+            std::to_string(this->_currentLine));
             return ;
         }
 
@@ -92,7 +96,7 @@ void Parser::parseInputLine(INPUT_LINE &line) {
 
         if (!value.length()) {
             this->_parserErrors.push_back("Parser error: empty value provided at line " +
-                                          std::to_string(this->_parsedLines.size() + 1));
+                                          std::to_string(this->_currentLine));
             return ;
         }
 
@@ -107,7 +111,7 @@ void Parser::parseInputLine(INPUT_LINE &line) {
             (!isdigit(value[i]) && value[i] != '-' && value[i] != '.') || (value[i] == '.' && i == value.length() - 1) ||
                     (value[i] == '.' && !numberFound)) {
                 this->_parserErrors.push_back("Parser error: invalid value at line " +
-                std::to_string(this->_parsedLines.size() + 1));
+                std::to_string(this->_currentLine));
                 return ;
             }
         }
